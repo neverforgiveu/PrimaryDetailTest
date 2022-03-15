@@ -8,6 +8,9 @@ import com.google.android.material.appbar.CollapsingToolbarLayout
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.webkit.WebResourceRequest
+import android.webkit.WebView
+import android.webkit.WebViewClient
 import android.widget.TextView
 import yukihana.lamy.primarydetail.placeholder.PlaceholderContent
 import yukihana.lamy.primarydetail.databinding.FragmentItemDetailBinding
@@ -25,7 +28,7 @@ class ItemDetailFragment : Fragment() {
      */
     private var item: PlaceholderContent.PlaceholderItem? = null
 
-    lateinit var itemDetailTextView: TextView
+    lateinit var webView: WebView
     private var toolbarLayout: CollapsingToolbarLayout? = null
 
     private var _binding: FragmentItemDetailBinding? = null
@@ -64,23 +67,38 @@ class ItemDetailFragment : Fragment() {
 
         _binding = FragmentItemDetailBinding.inflate(inflater, container, false)
         val rootView = binding.root
-
-        toolbarLayout = binding.toolbarLayout
-        itemDetailTextView = binding.itemDetail
-
+        webView = rootView.findViewById(R.id.webView)
         updateContent()
         rootView.setOnDragListener(dragListener)
+
+        item?.let {
+
+            webView.webViewClient = object : WebViewClient() {
+
+                override fun shouldOverrideUrlLoading(
+                    view: WebView, request: WebResourceRequest
+                ): Boolean {
+                    return super.shouldOverrideUrlLoading(
+                        view, request)
+                }
+
+
+            }
+
+            webView.loadUrl(it.website_url)
+
+        }
 
         return rootView
     }
 
     private fun updateContent() {
-        toolbarLayout?.title = item?.website_name
-
-        // Show the placeholder content as text in a TextView.
-        item?.let {
-            itemDetailTextView.text = it.website_url
-        }
+//        toolbarLayout?.title = item?.website_name
+//
+//        // Show the placeholder content as text in a TextView.
+//        item?.let {
+//            itemDetailTextView.text = it.website_url
+//        }
     }
 
     companion object {

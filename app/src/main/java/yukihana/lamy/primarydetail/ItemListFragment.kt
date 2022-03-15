@@ -111,8 +111,8 @@ class ItemListFragment : Fragment() {
 
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
             val item = values[position]
-            holder.idView.text = item.id
-            holder.contentView.text = item.website_name
+            holder.idView.text = item.website_name
+            holder.contentView.text =  item.website_url
 
             with(holder.itemView) {
                 tag = item
